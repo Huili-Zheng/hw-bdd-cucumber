@@ -16,10 +16,10 @@ end
 # Make sure that one string (regexp) occurs before or after another one
 #   on the same page
 
-Then /I should see "(.*)" before "(.*)"/ do |e1, e2|
+Then /I should see (.*) before (.*)/ do |e1, e2|
   #  ensure that that e1 occurs before e2.
   #  page.body is the entire content of the page as a string.
-  pending "Fill in this step in movie_steps.rb"
+  expect(page.body).to have_content ~ /.#{e1}.+#{e2}/
 end
 
 # Make it easier to express checking or unchecking several boxes at once
@@ -58,9 +58,9 @@ end
 
 Then /I should see all the movies/ do
   # Make sure that all the movies in the app are visible in the table
-  movies = Movie.all
-  movies.each do |movie|
-    expect(page).to have_content ~/#{movie.title}/, "#{movie.title} "
+  count = Movie.count
+  within('#movies') do
+    expect(all('tr').count-1).to eq count
   end
 end
 
