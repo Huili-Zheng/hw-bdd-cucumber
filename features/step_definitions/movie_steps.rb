@@ -30,12 +30,30 @@ When /I (un)?check the following ratings: (.*)/ do |uncheck, rating_list|
   # HINT: use String#split to split up the rating_list, then
   #   iterate over the ratings and reuse the "When I check..." or
   #   "When I uncheck..." steps in lines 89-95 of web_steps.rb
-  pending "Fill in this step in movie_steps.rb"
+  rating_list = rating_list.split(',')
+  if uncheck
+    rating_list.each do |rating|
+      uncheck(rating)
+    end
+  else
+    rating_list.each do |rating|
+      check(rating)
+    end
+  end
 end
 
 # Part 2, Step 3
 Then /^I should (not )?see the following movies: (.*)$/ do |no, movie_list|
-  # Take a look at web_steps.rb Then /^(?:|I )should see "([^"]*)"$/
+  movie_list= movie_list.split(/,/)
+  if no
+    movie_list.each do |movie|  
+      expect(page).not_to have_content(movie)
+    end
+  else
+    movie_list.each do |movie| 
+      expect(page).to have_content(movie)
+    end
+  end
 end
 
 Then /I should see all the movies/ do
